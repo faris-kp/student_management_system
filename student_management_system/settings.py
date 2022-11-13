@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'student_management_system.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'stdmng',
+       'NAME': 'std_mng',
        'USER': 'postgres',
        'PASSWORD':os.environ.get('pass'),
        'HOST': 'localhost',

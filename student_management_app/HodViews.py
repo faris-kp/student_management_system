@@ -296,3 +296,6 @@ def edit_student_save(request):
             form=EditStudentForm(request.POST)
             student = Students.objects.get(admin=student_id)
             return render(request,"hod_template/edit_student_template.html",{"form":form,"id":student_id,"username":student.admin.username})
+
+def manage_session(request):
+    return render(request,"hod_template/manage_session_template.html")

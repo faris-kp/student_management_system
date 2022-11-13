@@ -36,7 +36,10 @@ class Subjects(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
 
-
+class SessionYearModel(models.Model):
+    id=models.AutoField(primary_key=True)
+    session_start_year=models.DateField()
+    session_end_year=models.DateField()
      
 
 class Students(models.Model):
@@ -44,8 +47,7 @@ class Students(models.Model):
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     gender=models.CharField(max_length=255)
     profile_pic=models.FileField()
-    session_start_year = models.DateField()
-    session_end_year = models.DateField()
+    session_year_id=models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
     address=models.TextField()
     course_id=models.ForeignKey(Courses,on_delete=models.DO_NOTHING)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -56,6 +58,7 @@ class Attendance(models.Model):
     subect_id=models.ForeignKey(Subjects,on_delete=models.DO_NOTHING)
     attadence_date=models.DateTimeField(auto_now_add=True)
     created_at=models.DateTimeField(auto_now_add=True)
+    session_year_id=models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
     updated_at=models.DateTimeField(auto_now_add=True)
 
 class AttendanceReport(models.Model):

@@ -1,5 +1,4 @@
 from django import forms
-from matplotlib import widgets
 
 from student_management_app.models import Courses
 
@@ -13,10 +12,14 @@ class AddStudentForm(forms.Form):
     last_name=forms.CharField(label="Last Name" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     username=forms.CharField(label="Username" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     address=forms.CharField(label="Address" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    courses=Courses.objects.all()
+    # courses=Courses.objects.all()
+    courses = {
+    'title' : 'awesome title',
+    
+   }
     course_list=[]
     for course in courses:
-        small_course=(course.id,course.course_name)
+        small_course=(course.title)
         course_list.append(small_course)
     gender_choices=(
         ("Male","Male"),
@@ -34,10 +37,15 @@ class EditStudentForm(forms.Form):
     last_name=forms.CharField(label="Last Name" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     username=forms.CharField(label="Username" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     address=forms.CharField(label="Address" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    courses=Courses.objects.all()
+    # courses=Courses.objects.all()
+    courses = {
+    'title' : 'awesome title',
+    'body' : 'great body of text',
+}
+
     course_list=[]
     for course in courses:
-        small_course=(course.id,course.course_name)
+        small_course=(course.title)
         course_list.append(small_course)
     gender_choices=(
         ("Male","Male"),
