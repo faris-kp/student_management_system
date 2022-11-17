@@ -38,24 +38,25 @@ class EditStudentForm(forms.Form):
     last_name=forms.CharField(label="Last Name" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     username=forms.CharField(label="Username" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     address=forms.CharField(label="Address" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    # courses=Courses.objects.all()
-    courses = {
-    'title' : 'awesome title',
-    'body' : 'great body of text',
-}
+    courses=Courses.objects.all()
+#     courses = {
+#     'title' : 'awesome title',
+#     'body' : 'great body of text',
+# }
 
-    session={
-        'ti' : '333',
-        'si' : '555',
-    }
+#     session={
+#         'ti' : '333',
+#         'si' : '555',
+#     }
     course_list=[]
     for course in courses:
-        small_course=(course.title)
+        small_course=(course.id, course.course_name)
         course_list.append(small_course)
-    
+
     session_list=[]
+    session = SessionYearModel.objects.all()
     for se in session:
-        small_course=(se.title)
+        small_course=(se.id,str(se.session_start_year)+"  TO  "+str(se.session_end_year))
         session_list.append(small_course)
     
     gender_choices=(
