@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render,HttpResponse,redirect
 from django.http import HttpResponseRedirect
-from student_management_app.models import Courses, CustomUser, Staffs, Students, Subjects
+from student_management_app.models import Courses, CustomUser, Staffs, Students, Subjects,SessionYearModel
 from django.core.files.storage import FileSystemStorage
 from .forms import AddStudentForm,EditStudentForm
 
@@ -67,7 +67,7 @@ def edit_staff_save(request):
             messages.success(request,"Successuly edit staff")
             return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
         except:
-            messages.success(request,"Failed to  add staff")
+            messages.error(request,"Failed to  add staff")
             return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
 
 
@@ -111,7 +111,7 @@ def edit_course_save(request):
         messages.success(request,"Successuly edit course")
         return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))
     except:
-        messages.success(request,"Failed  to  edit course")
+        messages.error(request,"Failed  to  edit course")
         return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))
 
 
@@ -168,7 +168,7 @@ def edit_subject_save(request):
         messages.success(request,"Successuly edit subject")
         return HttpResponseRedirect(reverse("edit_subject",kwargs={"subject_id":subject_id}))
     except:
-        messages.success(request,"Failed  to  edit subject")
+        messages.error(request,"Failed  to  edit subject")
         return HttpResponseRedirect(reverse("edit_subject",kwargs={"subject_id":subject_id}))
 
 def manage_subjects(request):
@@ -195,8 +195,7 @@ def add_student_save(request):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
             address = form.cleaned_data["address"]
-            start_year = form.cleaned_data["session_start"]
-            end_year = form.cleaned_data["session_end"]
+            session_year_id = form.cleaned_data["session_year_id"]
             course_id = form.cleaned_data["course"]
             sex = form.cleaned_data["sex"]
             profile_pic = form.cleaned_data["profile_pic"]
@@ -208,15 +207,15 @@ def add_student_save(request):
                  user.students.address = address
                  course_obj = Courses.objects.get(id=course_id)
                  user.students.course_id = course_obj
-                 user.students.session_start_year = start_year
-                 user.students.session_end_year = end_year
+                 session_year = SessionYearModel.objects.get(id=session_year_id)
+                 user.students.session_year_id = session_year
                  user.students.gender=sex
                  user.students.profile_pic=profile_pic_url
                  user.save()
                  messages.success(request,"Successuly added students")
                  return redirect('add_student')
             except:
-                messages.success(request,"Failed to  added students")
+                messages.error(request,"Failed to  added students")
                 return redirect('add_student')
         else:
             form=AddStudentForm(request.POST)
@@ -239,8 +238,8 @@ def edit_student(request,student_id):
     form.fields['address'].initial=student.address
     form.fields['course'].initial=student.course_id.id
     form.fields['sex'].initial=student.gender
-    form.fields['session_start'].initial=student.session_start_year
-    form.fields['session_end'].initial=student.session_end_year
+    form.fields['session_year_id'].initial=student.session_year_id
+    
     return render(request,"hod_template/edit_student_template.html",{"form":form,"id":student_id,"username":student.admin.username})
 
 def edit_student_save(request):
@@ -257,8 +256,7 @@ def edit_student_save(request):
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
             address = form.cleaned_data["address"]
-            start_year = form.cleaned_data["session_start"]
-            end_year = form.cleaned_data["session_end"]
+            session_year_id = form.cleaned_data["session_year_id"]
             course_id = form.cleaned_data["course"]
             sex = form.cleaned_data["sex"]
             if request.FILES.get('profile_pic',False):
@@ -278,8 +276,8 @@ def edit_student_save(request):
                 user.save()
                 student = Students.objects.get(admin=student_id)
                 student.address=address
-                student.session_start_year = start_year
-                student.session_end_year = end_year
+                session_year = SessionYearModel.objects.get(id=session_year_id)
+                student.session_year_id = session_year
                 student.gender = sex
                 if profile_pic_url != None:
                     student.profile_pic = profile_pic_url
@@ -290,7 +288,7 @@ def edit_student_save(request):
                 messages.success(request,"Successuly edit student")
                 return HttpResponseRedirect(reverse("edit_student",kwargs={"student_id":student_id}))
             except:
-                messages.success(request,"Failed to  add student")
+                messages.error(request,"Failed to  add student")
                 return HttpResponseRedirect(reverse("edit_student",kwargs={"student_id":student_id}))
         else:
             form=EditStudentForm(request.POST)
@@ -299,3 +297,19 @@ def edit_student_save(request):
 
 def manage_session(request):
     return render(request,"hod_template/manage_session_template.html")
+
+
+def add_session_save(request):
+    if request.method!="POST":
+        return redirect('manage_session')
+    else:
+        session_start_year = request.POST.get("session_start")
+        session_end_year = request.POST.get("session_end")
+        try:
+            sessionyear=SessionYearModel(session_start_year=session_start_year,session_end_year=session_end_year)
+            sessionyear.save()
+            messages.success(request,"Successuly Add Session")
+            return HttpResponseRedirect(reverse("manage_session"))
+        except:
+            messages.error(request,"Failed to  Add Session")
+            return HttpResponseRedirect(reverse("manage_session"))
