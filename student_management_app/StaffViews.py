@@ -7,17 +7,22 @@ def staff_home(request):
 
 def staff_take_attendence(request):
     subjects = Subjects.objects.filter(staff_id = request.user.id)
-    sessionyears = SessionYearModel.objects.all()
-    return render(request,"staff_template/staff_take_attendence.html",{"subjects":subjects,"sessionyears":sessionyears})
+    session_years = SessionYearModel.objects.all()
+    return render(request,"staff_template/staff_take_attendence.html",{"subjects":subjects,"session_years":session_years})
 
 @csrf_exempt
 def get_students(request):
-    subject_id = request.POST.get("subject")
-    sesseion_year = request.POST.get("session_year")
-
+    print("Entering into funtion")
+    subject_id = request.POST.get('subject',False)
+    print("..",subject_id)
+    session_year = request.POST.get('session_year',False)
+    print(",,,",session_year)
     subject = Subjects.objects.get(id=subject_id)
-    session_model = SessionYearModel.objects.get(id=sesseion_year)
+    print("get student",subject)
+    session_model = SessionYearModel.objects.get(id=session_year)
+    print("sesseion chekc",session_model)
 
-    students = Students.objects.filter(course_id=subject.course_id,session_year_id=session_model)
+    students=Students.objects.filter(course_id=subject.course_id,session_year_id=session_model)
+    print("studets chechk",students)
     return HttpResponse(students)
 
