@@ -1,7 +1,10 @@
+from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from matplotlib.font_manager import json_dump
 from student_management_app.models import Subjects,SessionYearModel,Students
-
+from django.core import serializers
+import json
 def staff_home(request):
     return render(request,"staff_template/staff_home_template.html")
 
@@ -24,5 +27,10 @@ def get_students(request):
 
     students=Students.objects.filter(course_id=subject.course_id,session_year_id=session_model)
     print("studets chechk",students)
-    return HttpResponse(students)
-
+    student_data =serializers.serialize("python",students)
+    list_data=[]
+    for student in students:
+        data_small = {"id":student.admin.id,"name":student.admin.first_name+" "+student.admin.last_name}
+        list_data.append(data_small)
+    print("datacheiking in sutdent",list_data)
+    return JsonResponse(json.dumps(list_data),content_type="application/json",safe=False)
