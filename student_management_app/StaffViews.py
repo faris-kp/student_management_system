@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from matplotlib.font_manager import json_dump
-from student_management_app.models import Subjects,SessionYearModel,Students
+from student_management_app.models import Subjects,SessionYearModel,Students,Attendance,AttendanceReport
 from django.core import serializers
 import json
 def staff_home(request):
@@ -34,3 +33,27 @@ def get_students(request):
         list_data.append(data_small)
     print("datacheiking in sutdent",list_data)
     return JsonResponse(json.dumps(list_data),content_type="application/json",safe=False)
+
+@csrf_exempt
+def save_attendance_data(request):
+    student_ids = request.POST.get("student_ids")
+    subject_id = request.POST.get("subject_id")
+    attedance_date = request.POST.get("attendance_date")
+    session_year_id = request.POST.get("session_year_id")
+
+    subject_model = Subjects.objects.get(id=subject_id)
+    session_model= SessionYearModel.objects.get(id=session_year_id)
+    print("id_check_save attendence",student_ids)
+    json_sstudent=json.loads(student_ids)
+    # print(data[0]['id'])
+    attedance = Attendance(subect_id=subject_model,attadence_date=attedance_date,session_year_id=session_model)
+    attedance.save()
+    try:
+        for stud in json_sstudent:
+            student=Students.objects.get(admin=stud['id'])
+            attedance_report=AttendanceReport(student_id=student,attendance_id=attedance,status=stud['status'])
+            attedance_report.save()
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("Error")
+
