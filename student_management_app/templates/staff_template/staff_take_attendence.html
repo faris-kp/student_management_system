@@ -111,7 +111,7 @@ Take Attendence
          }
           }).get()
         console.log("student_data_this_cheking",student_data)
-        var attendance_date=$("#attendance_data").val();
+        var attendance_date=$("#attendance_date").val();
         var subject_id=$("#subject").val()
         var session_year_id=$("#session_year").val()
         student_data=JSON.stringify(student_data)
@@ -119,7 +119,7 @@ Take Attendence
         $.ajax({
           url:'{% url 'save_attendance_data' %}',
           type:'POST',
-          data:{student_ids:student_data,attendance_date:attendance_date,subject_id:subject_id,session_year_id:session_year_id},
+          data:{student_ids:student_data,attendance_date:attendance_date,subect_id:subject_id,session_year_id:session_year_id},
         })
         .done(function(response){
           if(response=="OK"){
@@ -129,10 +129,7 @@ Take Attendence
           {
             alert("Error In Saving Data")
           }
-          location.reload()
-          
-          
-          console.log(response)        
+          location.reload()       
         })
         .fail(function(){
           alert("Error in Saving Student")

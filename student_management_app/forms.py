@@ -14,6 +14,15 @@ class AddStudentForm(forms.Form):
     address=forms.CharField(label="Address" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     courses=Courses.objects.all()
     course_list=[]
+#     courses = {
+#      'title' : 'awesome title',
+#      'body' : 'great body of text',
+#  }
+    # session={
+    #      'ti' : '333',
+    #      'si' : '555',
+    #  }
+
     for course in courses:
         small_course=(course.id, course.course_name)
         course_list.append(small_course)
@@ -39,15 +48,16 @@ class EditStudentForm(forms.Form):
     username=forms.CharField(label="Username" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     address=forms.CharField(label="Address" ,max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     courses=Courses.objects.all()
+    print("course cheking ",courses)
 #     courses = {
-#     'title' : 'awesome title',
-#     'body' : 'great body of text',
-# }
+#      'title' : 'awesome title',
+#      'body' : 'great body of text',
+#  }
 
 #     session={
-#         'ti' : '333',
-#         'si' : '555',
-#     }
+#          'ti' : '333',
+#          'si' : '555',
+#      }
     course_list=[]
     for course in courses:
         small_course=(course.id, course.course_name)
