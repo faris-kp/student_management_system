@@ -1,4 +1,5 @@
 {% extends 'hod_template/base_template.html' %}
+{% load static %}
 {% block page_title  %}<h2>Manage Student</h2>{% endblock page_title  %}
 
 {% block main_content %}
@@ -51,7 +52,7 @@
                         <td>{{ student.admin.email }}</td>
                         <td>{{ student.address }}</td>
                         <td>{{ student.gender }}</td>
-                        <td><img src="{{ student.profile_pic }}" style="width:100px"></td>
+                        <td><img src="{{ student.profile_pic }}" alt="image not diplaying" style="width:100px"/></td>
                         <td>{{ student.session_start_year }}</td>
                         <td>{{ student.session_end_year }}</td>
                         <td>{{ student.course_id.course_name }}</td>

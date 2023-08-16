@@ -6,6 +6,7 @@ from student_management_app.models import Courses, CustomUser, Staffs, Students,
 from django.core.files.storage import FileSystemStorage
 from .forms import AddStudentForm,EditStudentForm
 
+
 def admin_home(request):
     return render(request,"hod_template/home_content.html")
 
@@ -225,6 +226,9 @@ def add_student_save(request):
 
 def manage_student(request):
     students = Students.objects.all()
+    profile = Students.objects.values_list('profile_pic')
+    print("profile cheking:",profile)
+    print("student cheking", students)
     return render(request,"hod_template/manage_student_template.html",{"students":students})
 
 
